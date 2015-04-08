@@ -5,7 +5,7 @@
 200M+的文件，计算md5和sha1一共大约要花2s。
 
 ###效果图
-
+![效果图](https://github.com/finghine/fcl-toolset/blob/master/filehash/images-folder/preview.png?raw=true)
 ###编译
 需要`maven`
 
