@@ -36,7 +36,7 @@ UE菜单 -> 高级 -> 工具配置
 ###实现
 json格式化使用的是gson库。
 
-html格式化使用的是jsopu库。
+html格式化使用的是jsoup库。
 
 ###TODO
 js格式化
