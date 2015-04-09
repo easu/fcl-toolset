@@ -14,7 +14,7 @@
       <configuration>
         <archive>
           <manifest>
-            <mainClass>wit.fcl.charsetconversion.App</mainClass>
+            <mainClass>edu.wit.fcl.charsetconversion.App</mainClass>
           </manifest>
         </archive>
         <descriptorRefs>
