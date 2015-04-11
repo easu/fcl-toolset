@@ -6,7 +6,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class App{
+public class App {
 	public static void main(String[] args) throws IOException {
 		if (args.length != 3) {
 			usage();
@@ -20,17 +20,28 @@ public class App{
 		line = br.readLine();
 		File targetFile = new File(line);
 		br.close();
+		String Icharset = args[1];
+		String Ocharset = args[2];
 		if (!targetFile.isDirectory()) {
 			System.out.println("target file must be directory");
 			return;
 		}
 		if (srcFile.isDirectory()) {
-			FileCharsetConversion.tranlsteDir(srcFile, args[1], targetFile,
-					args[2]);
+			System.out.println(srcFile.getAbsolutePath());
+			System.out.println("[" + Icharset + "]---dir---->[" + Ocharset
+					+ "]");
+			System.out.println(targetFile.getAbsolutePath());
+			FileCharsetConversion.tranlsteDir(srcFile, Icharset, targetFile,
+					Ocharset);
 		} else if (srcFile.isFile()) {
-			FileCharsetConversion.tranlsteDir(srcFile, args[1], new File(
-					targetFile.getAbsolutePath() + "/" + srcFile.getName()),
-					args[2]);
+			File dstFile = new File(targetFile.getAbsolutePath() + "/" + srcFile.getName());
+			System.out.println(srcFile.getAbsolutePath());
+			System.out.println("[" + Icharset + "]---file---->[" + Ocharset
+					+ "]");
+			System.out.println(dstFile.getAbsolutePath());
+			FileCharsetConversion.tranlste(srcFile, Icharset, dstFile,Ocharset);
+		} else {
+			System.out.println("error");
 		}
 
 	}
@@ -40,7 +51,8 @@ public class App{
 		System.out
 				.println("charsetcoversion <configFilePath> <inputfilecharset> <ouputfilecharset>");
 		System.out.println("  configFile contain two line");
-		System.out.println("  first line contain Source file or directory path");
+		System.out
+				.println("  first line contain Source file or directory path");
 		System.out.println("  second line target dir");
 		System.out.println("    eg: charsetcoversion C:/config.txt utf8 gbk");
 		System.out.println("       config.txt :");
