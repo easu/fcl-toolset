@@ -41,5 +41,8 @@ html格式化使用的是jsoup库。
 ###TODO
 js格式化
 
+发现了一个python版本的
+[js-beautify](https://github.com/beautify-web/js-beautify)
+
 
 
