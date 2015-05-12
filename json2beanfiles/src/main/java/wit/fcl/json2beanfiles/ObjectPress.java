@@ -18,6 +18,12 @@ public class ObjectPress {
 	protected StringBuilder fileStringBuffer = new StringBuilder();
 	protected ClassFileObject obj = null;
 
+	protected boolean isNeedtoStringMethod = false;
+
+	public ObjectPress(ClassFileObject obj,boolean isNeedToStringMethod) {
+		this.obj = obj;
+		this.isNeedtoStringMethod = isNeedToStringMethod;
+	}
 	public ObjectPress(ClassFileObject obj) {
 		super();
 		this.obj = obj;
@@ -154,13 +160,13 @@ public class ObjectPress {
 		return false;
 	}
 
-	public void outputFile(File file) throws IOException {
-		outputFile(file, "UTF-8");
-	}
-
 	public void outputFile(File file, String charset) throws IOException {
 		appendLine("package " + obj.getPacketName() + ";");
 		appendLine();
+		if(isNeedtoStringMethod)
+		{
+			appendLine("import java.net.URLEncoder;");
+		}
 		if (isContentListElement()) {
 			appendLine("import java.util.List;");
 			appendLine();
@@ -171,7 +177,13 @@ public class ObjectPress {
 		addFieldStatement();
 		addFieldInitMethod();
 		addGetSetMethod();
+		// 为request 增加toString 方法
+		if(isNeedtoStringMethod)
+		{
+			addFieldToStringMethod();
+		}
 		appendLine("}");
+		
 		// 解析后才要了解是不是导入
 		if (isContainSerializedStatement) {
 			insertSerializedName();
@@ -181,6 +193,29 @@ public class ObjectPress {
 		fos.close();
 	}
 
+	protected void addFieldToStringMethod() {
+		List<FieldInfo> list = obj.getFields();
+		appendLine(space(1)+"@Override");
+		appendLine(space(1)+"public String toString() {");
+		appendLine(space(2)+"try {");
+		StringBuffer sb = new StringBuffer();
+		sb.append("return \r\n");
+		for (FieldInfo fieldInfo : list) {
+			String fieldName = fieldInfo.getFieldName();
+			String fieldNewName = checkAndAdd(fieldName, CHECK_TYPE_STATEMENT);
+//			String value = fieldInfo.getDefualValue();
+//				sb.append("\"&"+fieldNewName+"=\" + "+URLEncoder.encode(value,"UTF-8"));
+			sb.append(space(2)+"\"&"+fieldNewName+"=\" + URLEncoder.encode("+fieldNewName+",\"UTF-8\") +\r\n");
+		}
+		sb.setCharAt(14, '?');
+		sb.delete(sb.length()-3,sb.length()-1);
+		sb.append(";");
+		appendLine(space(1)+sb.toString());
+		appendLine(space(2)+"}catch (Exception e) {}");
+		appendLine(space(2)+"return \"\";");
+		appendLine(space(1)+"}");
+		appendLine();
+	}
 	private void insertSerializedName() {
 		int pos = 8 + obj.getPacketName().length() + 3;
 		String insertStr = "\r\nimport com.google.gson.annotations.SerializedName;\r\n";

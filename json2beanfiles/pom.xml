@@ -14,7 +14,7 @@
       <configuration>
         <archive>
           <manifest>
-            <mainClass>wit.fcl.json2beanfiles.App</mainClass>
+            <mainClass>wit.fcl.json2beanfiles.App2</mainClass>
           </manifest>
         </archive>
         <descriptorRefs>
